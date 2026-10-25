@@ -1,0 +1,27 @@
+:root {
+  /* Palette: a dark PCB. Soldermask, silkscreen, gold pads, signal trace. */
+  --board: #0e1c1a;
+  --board-raised: #142726;
+  --trace: #28403c;
+  --silk: #e8efe7;
+  --silk-dim: #a3b6ae;
+  --gold: #e3b94b;
+  --signal: #6fb1e6;
+
+  /* Type */
+  --font-sans: 'Bricolage Grotesque Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --step--1: 0.9375rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.3125rem;
+  --step-2: clamp(1.9rem, 1.4rem + 2vw, 2.75rem);
+  --step-hero: clamp(2.6rem, 1.2rem + 4.6vw, 4.5rem);
+
+  /* Layout */
+  --rail-w: 15rem;
+  --gutter: clamp(1.25rem, 4vw, 3.5rem);
+  --measure: 62ch;
+
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}

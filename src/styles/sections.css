@@ -1,0 +1,758 @@
+/* ───────── Layout ───────── */
+
+.main {
+  margin-left: var(--rail-w);
+  padding-inline: var(--gutter);
+}
+
+.section {
+  max-width: 54rem;
+  padding-block: clamp(4.5rem, 12vh, 8.5rem);
+}
+
+.section__title {
+  margin-bottom: 0.75rem;
+  font-size: var(--step-2);
+  font-weight: 650;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.section__intro {
+  max-width: var(--measure);
+  margin-bottom: clamp(2rem, 5vh, 3rem);
+  color: var(--silk-dim);
+}
+
+.footer {
+  padding-block: 3rem;
+  color: var(--silk-dim);
+  font-size: var(--step--1);
+}
+
+/* ───────── Shared bits ───────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--trace);
+  border-radius: 0.375rem;
+  background: transparent;
+  font-weight: 550;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.btn:hover {
+  border-color: var(--silk-dim);
+}
+
+.btn--solid {
+  border-color: var(--gold);
+  background: var(--gold);
+  color: var(--board);
+}
+
+.btn--solid:hover {
+  border-color: #efc95f;
+  background: #efc95f;
+}
+
+.link {
+  text-decoration: underline;
+  text-decoration-color: var(--trace);
+  text-underline-offset: 0.3em;
+  transition: text-decoration-color 0.2s;
+}
+
+.link:hover {
+  text-decoration-color: var(--gold);
+}
+
+/* A small square that says which side of the stack something lives on. */
+.swatch {
+  flex: none;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 2px;
+  background: var(--lane);
+}
+
+[data-lane='software'] {
+  --lane: var(--signal);
+}
+
+[data-lane='hardware'] {
+  --lane: var(--gold);
+}
+
+[data-lane='both'] {
+  --lane: linear-gradient(90deg, var(--signal) 50%, var(--gold) 50%);
+}
+
+/* ───────── Rail (navigation) ───────── */
+
+.rail {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: var(--rail-w);
+  padding: 2.5rem 1.5rem 2.5rem var(--gutter);
+}
+
+.rail__home {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.rail__list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: min(22rem, 50vh);
+}
+
+/* The trace: a dim line, with a gold segment up to the active section. */
+.rail__list::before,
+.rail__list::after {
+  content: '';
+  position: absolute;
+  top: 0.75rem;
+  left: 5px;
+  width: 2px;
+}
+
+.rail__list::before {
+  bottom: 0.75rem;
+  background: var(--trace);
+}
+
+.rail__list::after {
+  height: calc((100% - 1.5rem) * var(--step) / var(--steps));
+  background: var(--gold);
+  transition: height 0.5s var(--ease);
+}
+
+.rail__link {
+  position: relative;
+  display: block;
+  padding-left: 1.75rem;
+  color: var(--silk-dim);
+  font-size: var(--step--1);
+  line-height: 1.5rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.rail__link:hover,
+.rail__link[aria-current='true'] {
+  color: var(--silk);
+}
+
+.rail__node {
+  position: absolute;
+  top: 0.375rem;
+  left: 0;
+  z-index: 1;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--trace);
+  border-radius: 50%;
+  background: var(--board);
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.rail__link[data-passed='true'] .rail__node {
+  border-color: var(--gold);
+}
+
+.rail__link[aria-current='true'] .rail__node {
+  background: var(--gold);
+}
+
+/* ───────── Hero ───────── */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(1.75rem, 4.5vh, 3rem);
+  min-height: 100svh;
+  padding-block: 4rem 3rem;
+}
+
+.hero__title {
+  max-width: 19ch;
+  font-size: var(--step-hero);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.hero__line {
+  display: block;
+  text-wrap: balance;
+}
+
+.hero__line + .hero__line {
+  margin-top: 0.2em;
+}
+
+.hero__about {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.hero__role {
+  font-size: var(--step-1);
+  font-weight: 600;
+}
+
+.hero__lede {
+  max-width: var(--measure);
+  color: var(--silk-dim);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* ───────── Signal trace (hero waveform) ───────── */
+
+.signal {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 44rem;
+}
+
+.signal__stage {
+  position: relative;
+}
+
+.signal__scope {
+  height: 4.5rem;
+  animation: signal-reveal 2.8s cubic-bezier(0.55, 0, 0.3, 1) 0.5s both;
+}
+
+.signal__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.signal__wave {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 2;
+}
+
+.signal__sep {
+  stroke: var(--trace);
+  stroke-width: 1;
+}
+
+.signal__frame {
+  fill: transparent;
+  transition: fill 0.2s;
+}
+
+.signal__frame.is-active {
+  fill: color-mix(in srgb, var(--signal) 16%, transparent);
+}
+
+/* The bright scan line that draws the waveform. Hidden unless animating. */
+.signal__scan {
+  position: absolute;
+  top: -0.5rem;
+  bottom: -0.5rem;
+  left: 0;
+  width: 2px;
+  background: var(--signal);
+  opacity: 0;
+  animation: signal-scan 2.8s cubic-bezier(0.55, 0, 0.3, 1) 0.5s both;
+}
+
+.signal__chars {
+  display: grid;
+  grid-template-columns: repeat(var(--n), 1fr);
+}
+
+.signal__item {
+  display: grid;
+  justify-items: center;
+  animation: signal-char 0.4s var(--ease) calc(0.5s + 2.8s * var(--i) / var(--n)) both;
+}
+
+.signal__glyph {
+  font-size: 1.75rem;
+  font-weight: 650;
+  line-height: 1.2;
+}
+
+.signal__hex {
+  color: var(--silk-dim);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.signal__caption {
+  color: var(--silk-dim);
+  font-size: var(--step--1);
+}
+
+@keyframes signal-reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes signal-scan {
+  0% {
+    left: 0;
+    opacity: 1;
+  }
+  96% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes signal-char {
+  from {
+    opacity: 0;
+    transform: translateY(0.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ───────── Skills: the layer stack ───────── */
+
+.layers {
+  display: grid;
+}
+
+.layer {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(8rem, 11rem) 1fr;
+  gap: 0.25rem 2rem;
+  padding: 1.1rem 0 1.1rem 1.5rem;
+  border-top: 1px solid var(--trace);
+}
+
+.layer:last-child {
+  border-bottom: 1px solid var(--trace);
+}
+
+/* The bar on the left blends from blue (software) to gold (hardware). */
+.layer::before {
+  content: '';
+  position: absolute;
+  top: 1.1rem;
+  bottom: 1.1rem;
+  left: 0;
+  width: 4px;
+  border-radius: 2px;
+  background: color-mix(in oklch, var(--signal), var(--gold) calc(var(--t) * 100%));
+}
+
+.layer__name {
+  font-size: var(--step-0);
+  font-weight: 650;
+}
+
+.layer__tools {
+  color: var(--silk-dim);
+}
+
+.layer--seam {
+  border-top-color: var(--gold);
+  background: var(--board-raised);
+}
+
+.layer--seam + .layer {
+  border-top-color: var(--gold);
+}
+
+.layer__note {
+  grid-column: 2;
+  font-size: var(--step--1);
+}
+
+/* ───────── Projects ───────── */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  padding: 0.25rem 1rem;
+  border: 1px solid var(--trace);
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.filter:hover {
+  border-color: var(--silk-dim);
+}
+
+.filter[aria-pressed='true'] {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.project {
+  border-top: 1px solid var(--trace);
+}
+
+.project:last-child {
+  border-bottom: 1px solid var(--trace);
+}
+
+.project__toggle {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 0.25rem 1.5rem;
+  width: 100%;
+  padding: 1.5rem 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.project__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+  font-size: var(--step-1);
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  transition: color 0.2s;
+}
+
+.project__toggle:hover .project__title {
+  color: var(--gold);
+}
+
+.project__lane {
+  color: var(--silk-dim);
+  font-size: var(--step--1);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.project__heading {
+  font-size: var(--step-0);
+  font-weight: 400;
+}
+
+.project__summary {
+  grid-column: 1;
+  max-width: var(--measure);
+  color: var(--silk-dim);
+  font-size: var(--step-0);
+  font-weight: 400;
+}
+
+/* A plus that turns into a cross when the row opens. */
+.project__chev {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1 / 3;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.3rem;
+  transition: transform 0.3s var(--ease);
+}
+
+.project__chev::before,
+.project__chev::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--silk-dim);
+  transform: translate(-50%, -50%);
+}
+
+.project__chev::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.project__toggle[aria-expanded='true'] .project__chev {
+  transform: rotate(45deg);
+}
+
+.project__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s var(--ease);
+}
+
+.project__panel[data-open='true'] {
+  grid-template-rows: 1fr;
+}
+
+.project__panel-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.project__body {
+  display: grid;
+  gap: 1.25rem;
+  max-width: var(--measure);
+  padding-bottom: 1.75rem;
+}
+
+.project__result {
+  font-weight: 600;
+}
+
+.project__stack {
+  color: var(--silk-dim);
+  font-size: var(--step--1);
+}
+
+.project__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
+
+.code {
+  overflow-x: auto;
+  padding: 1rem 1.25rem;
+  border-radius: 0.375rem;
+  background: var(--board-raised);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.65;
+}
+
+/* ───────── Experience timeline ───────── */
+
+.timeline {
+  display: grid;
+  margin-top: clamp(2rem, 5vh, 3rem);
+}
+
+.job {
+  display: grid;
+  grid-template-columns: 10.5rem 1fr;
+  column-gap: 2rem;
+}
+
+.job__when {
+  padding-top: 0.15rem;
+  color: var(--silk-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.job__body {
+  position: relative;
+  padding: 0 0 2.75rem 2rem;
+  border-left: 2px solid var(--trace);
+}
+
+.job__body::before {
+  content: '';
+  position: absolute;
+  top: 0.4rem;
+  left: -7px;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--trace);
+  border-radius: 50%;
+  background: var(--board);
+}
+
+.job--lead .job__body::before {
+  border-color: var(--gold);
+  background: var(--gold);
+}
+
+.job:last-child .job__body {
+  padding-bottom: 0;
+  border-left-color: transparent;
+}
+
+.job__role {
+  font-size: var(--step-1);
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+
+.job__org {
+  color: var(--silk-dim);
+}
+
+.job__points {
+  display: grid;
+  gap: 0.5rem;
+  max-width: var(--measure);
+  margin-top: 0.75rem;
+}
+
+/* ───────── Certification ───────── */
+
+.certs__list {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.cert {
+  display: grid;
+  gap: 0.25rem;
+  justify-items: start;
+  max-width: var(--measure);
+}
+
+.cert__name {
+  font-weight: 600;
+}
+
+.cert__issuer {
+  color: var(--silk-dim);
+}
+
+/* ───────── Contact ───────── */
+
+.contact__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.contact__status {
+  min-height: 1.5rem;
+  color: var(--gold);
+  font-size: var(--step--1);
+}
+
+.contact__address {
+  margin-top: 1.25rem;
+  color: var(--silk-dim);
+}
+
+.contact__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin-top: 2rem;
+}
+
+/* ───────── Small screens: the rail becomes a sticky top bar ───────── */
+
+@media (max-width: 56rem) {
+  .rail {
+    position: sticky;
+    inset: 0 auto auto 0;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.25rem;
+    width: auto;
+    padding: 0.75rem var(--gutter);
+    border-bottom: 1px solid var(--trace);
+    background: color-mix(in srgb, var(--board) 92%, transparent);
+    backdrop-filter: blur(8px);
+  }
+
+  .rail__list {
+    flex: 1;
+    flex-direction: row;
+    gap: 1.25rem;
+    height: auto;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    /* Fade the right edge to show the list scrolls. */
+    mask-image: linear-gradient(90deg, #000 calc(100% - 1.5rem), transparent);
+  }
+
+  .rail__list::before,
+  .rail__list::after,
+  .rail__node {
+    display: none;
+  }
+
+  .rail__link {
+    padding: 0.25rem 0;
+    white-space: nowrap;
+  }
+
+  .rail__link[aria-current='true'] {
+    box-shadow: inset 0 -2px var(--gold);
+  }
+
+  .main {
+    margin-left: 0;
+  }
+
+  .hero {
+    min-height: calc(100svh - 3.5rem);
+  }
+}
+
+@media (max-width: 40rem) {
+  .layer {
+    grid-template-columns: 1fr;
+  }
+
+  .layer__note {
+    grid-column: 1;
+  }
+
+  .job {
+    grid-template-columns: 1fr;
+  }
+
+  .job__when {
+    padding: 0 0 0.25rem 2rem;
+  }
+
+  .signal__glyph {
+    font-size: 1.25rem;
+  }
+
+  .signal__hex {
+    font-size: 0.6875rem;
+  }
+}
